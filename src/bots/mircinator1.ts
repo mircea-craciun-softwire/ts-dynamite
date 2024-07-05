@@ -6,12 +6,19 @@ class Bot {
 
     makeMove(gamestate: Gamestate): BotSelection {
 
-        this.possibleMoves
+        if(gamestate.rounds.length > 0) {
+            return this.getBeatingMove(this.getOpponentLastMove(gamestate));
+        }else{
+            return 'D';
+        }
 
-        return 'P';
     }
 
-    private getBeatingMove(move: string): string {
+    private getOpponentLastMove(gamestate: Gamestate): BotSelection{
+        return gamestate.rounds[gamestate.rounds.length - 1].p2;
+    }
+
+    private getBeatingMove(move: BotSelection): BotSelection {
         switch (move){
             case 'R':
                 return 'P';
@@ -22,8 +29,13 @@ class Bot {
             case 'D':
                 return 'W';
             case 'W':
-                return ;
+                return this.getRandomElement(['R','P','S']);
         }
+    }
+
+    private getRandomElement(set: BotSelection[]): BotSelection{
+        const index = Math.floor(Math.random() * set.length);
+        return set[index];
     }
 }
 

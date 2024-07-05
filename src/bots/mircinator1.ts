@@ -6,22 +6,19 @@ class Bot {
 
     dynamitesLeft = 100;
 
+    dynamiteInterval: number;
+
     makeMove(gamestate: Gamestate): BotSelection {
+
+        this.dynamiteInterval = this.getRandomNumber(25);
 
         let chosenMove: BotSelection;
 
-        if (gamestate.rounds.length > 0) {
-            chosenMove = this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(
-                move => {
-                    if (this.dynamitesLeft > 0) {
-                        return move !== this.getOpponentLastMove(gamestate);
-                    } else {
-                        return move !== this.getOpponentLastMove(gamestate) && move !== 'D';
-                    }
-                }
-            )));
-        } else {
+        if (gamestate.rounds.length % this.dynamiteInterval === 0) {
             chosenMove = 'D';
+            this.dynamiteInterval = this.getRandomNumber(25);
+        }else{
+            chosenMove = this.getBeatingMove(this.getOpponentLastMove(gamestate));
         }
 
         if (chosenMove === 'D') {
@@ -51,8 +48,11 @@ class Bot {
     }
 
     private getRandomElement(set: BotSelection[]): BotSelection {
-        const index = Math.floor(Math.random() * set.length);
-        return set[index];
+        return set[this.getRandomNumber(set.length)];
+    }
+
+    private getRandomNumber(max: number): number{
+        return Math.floor(Math.random() * max);
     }
 }
 

@@ -4,14 +4,31 @@ class Bot {
 
     readonly possibleMoves: BotSelection[] = [ 'R' , 'P' , 'S' , 'D' , 'W'];
 
+    dynamitesLeft = 100;
+
     makeMove(gamestate: Gamestate): BotSelection {
 
+        let chosenMove: BotSelection;
+
         if(gamestate.rounds.length > 0) {
-            return(this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(move => move !== this.getOpponentLastMove(gamestate)))));
+            chosenMove = this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(
+                move => {
+                    if(this.dynamitesLeft > 0) {
+                        return move !== this.getOpponentLastMove(gamestate);
+                    }else{
+                        return move !== this.getOpponentLastMove(gamestate) && move !== 'D';
+                    }
+                }
+            )));
         }else{
-            return 'D';
+            chosenMove = 'D';
         }
 
+        if(chosenMove === 'D'){
+            if(this.dynamitesLeft < 1)return 'S';
+            this.dynamitesLeft--;
+        }
+        return chosenMove;
     }
 
     private getOpponentLastMove(gamestate: Gamestate): BotSelection{

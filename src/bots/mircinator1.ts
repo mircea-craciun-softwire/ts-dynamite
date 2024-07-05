@@ -18,7 +18,11 @@ class Bot {
             chosenMove = 'D';
             this.dynamiteInterval = this.getRandomNumber(25);
         }else{
-            chosenMove = this.getBeatingMove(this.getOpponentLastMove(gamestate));
+            if (this.opponentHasRepeatedInTheLastNTurns(gamestate, 5)) {
+                chosenMove = this.getBeatingMove(this.getOpponentLastMove(gamestate));
+            }else{
+                chosenMove = this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(move => move !== this.getOpponentLastMove(gamestate))));
+            }
         }
 
         if (chosenMove === 'D') {
@@ -53,6 +57,15 @@ class Bot {
 
     private getRandomNumber(max: number): number{
         return Math.floor(Math.random() * max);
+    }
+
+    private opponentHasRepeatedInTheLastNTurns(gameState: Gamestate, n: number){
+        for (let i = gameState.rounds.length - 1; i > gameState.rounds.length - n && i > 0; i--){
+            if (gameState[i] === gameState[i + 1]){
+               return true;
+            }
+        }
+        return false;
     }
 }
 

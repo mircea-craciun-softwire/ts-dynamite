@@ -21,13 +21,16 @@ class Bot {
             if (this.opponentHasRepeatedInTheLastNTurns(gamestate, 5)) {
                 chosenMove = this.getBeatingMove(this.getOpponentLastMove(gamestate));
             }else{
-                chosenMove = this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(move => move !== this.getOpponentLastMove(gamestate))));
+                chosenMove = this.getRandomElement( this.possibleMoves );
             }
         }
 
         if (chosenMove === 'D') {
-            if (this.dynamitesLeft < 1) return 'S';
-            this.dynamitesLeft--;
+            if (this.dynamitesLeft < 1) {
+                return 'S';
+            }else {
+                this.dynamitesLeft--;
+            }
         }
         return chosenMove;
     }
@@ -60,7 +63,7 @@ class Bot {
     }
 
     private opponentHasRepeatedInTheLastNTurns(gameState: Gamestate, n: number){
-        for (let i = gameState.rounds.length - 1; i > gameState.rounds.length - n && i > 0; i--){
+        for (let i = gameState.rounds.length - 1; i >= (gameState.rounds.length - n) && i > 0; i--){
             if (gameState[i] === gameState[i + 1]){
                return true;
             }

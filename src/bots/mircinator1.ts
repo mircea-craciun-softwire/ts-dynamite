@@ -63,8 +63,8 @@ class Bot {
     }
 
     private opponentHasRepeatedInTheLastNTurns(gameState: Gamestate, n: number){
-        for (let i = gameState.rounds.length - 1; i >= (gameState.rounds.length - n) && i > 0; i--){
-            if (gameState[i] === gameState[i + 1]){
+        for (let i = gameState.rounds.length - 2; i >= (gameState.rounds.length - n) && i > 0; i--){
+            if (gameState.rounds[i].p2 === gameState.rounds[i + 1].p2){
                return true;
             }
         }

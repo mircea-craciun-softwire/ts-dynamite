@@ -2,12 +2,12 @@ import { Gamestate, BotSelection } from '../models/gamestate';
 
 class Bot {
 
-    readonly possibleMoves: string[] = [ 'R' , 'P' , 'S' , 'D' , 'W'];
+    readonly possibleMoves: BotSelection[] = [ 'R' , 'P' , 'S' , 'D' , 'W'];
 
     makeMove(gamestate: Gamestate): BotSelection {
 
         if(gamestate.rounds.length > 0) {
-            return this.getBeatingMove(this.getOpponentLastMove(gamestate));
+            return(this.getBeatingMove(this.getRandomElement(this.possibleMoves.filter(move => move !== this.getOpponentLastMove(gamestate)))));
         }else{
             return 'D';
         }

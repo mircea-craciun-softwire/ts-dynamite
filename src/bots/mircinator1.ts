@@ -21,7 +21,7 @@ class Bot {
             if (this.opponentHasRepeatedInTheLastNTurns(gamestate, 5)) {
                 chosenMove = this.getBeatingMove(this.getOpponentLastMove(gamestate));
             }else{
-                chosenMove = this.getRandomElement( this.possibleMoves );
+                chosenMove = this.getRandomElement( ['R','P','S'] );
             }
         }
 
